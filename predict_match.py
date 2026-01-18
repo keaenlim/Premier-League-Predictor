@@ -462,8 +462,8 @@ if __name__ == "__main__":
     # Example 1: Automatic stats extraction AND odds fetching (RECOMMENDED)
     # Just provide team names - everything else is fetched automatically!
     
-    home_team = 'Man United'
-    away_team = 'Man City'
+    home_team = 'Chelsea'
+    away_team = 'Brentford'
     
     print("=" * 70)
     print(f"FULL AUTOMATIC PREDICTION - {home_team} vs {away_team}")

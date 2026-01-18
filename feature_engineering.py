@@ -64,10 +64,11 @@ def engineer_features(input_file='preprocessed_data_predictable.csv', windows=[5
     for col in feature_cols:
         df[col] = np.nan
     
-    # Track rolling statistics for each team
-    # Structure: team_stats[team_id] = list of match dictionaries
-    team_history = defaultdict(list)    # Defaultdict is a smart dictionary that prepares 
-                                        # empty lists automatically, without needing to check for existence
+    # Track rolling statistics for each team, separated by venue
+    # Structure: team_history_home[team_id] = list of HOME match dictionaries
+    #            team_history_away[team_id] = list of AWAY match dictionaries
+    team_history_home = defaultdict(list)  # Team's performance when playing AT HOME
+    team_history_away = defaultdict(list)  # Team's performance when playing AWAY
     
     print("\nCalculating rolling features chronologically...")
     
@@ -81,7 +82,11 @@ def engineer_features(input_file='preprocessed_data_predictable.csv', windows=[5
         
         # STEP 1: Calculate features for THIS match using PAST data only
         for team_id, is_home, prefix in [(home_id, True, 'Home'), (away_id, False, 'Away')]:
-            team_past_matches = team_history[team_id]
+            # Use venue-specific history: home team's home games, away team's away games
+            if is_home:
+                team_past_matches = team_history_home[team_id]  # Home team: use their HOME history
+            else:
+                team_past_matches = team_history_away[team_id]  # Away team: use their AWAY history
             
             # Calculate rolling averages for each window
             for window in windows:
@@ -156,7 +161,8 @@ def engineer_features(input_file='preprocessed_data_predictable.csv', windows=[5
         home_points = 3 if home_result == 'W' else (1 if home_result == 'D' else 0)
         away_points = 3 if away_result == 'W' else (1 if away_result == 'D' else 0)
         
-        team_history[home_id].append({
+        # Record home team's match in their HOME history (they played at home)
+        team_history_home[home_id].append({
             'goals_scored': home_goals,
             'goals_conceded': away_goals,
             'result': home_result,
@@ -168,7 +174,8 @@ def engineer_features(input_file='preprocessed_data_predictable.csv', windows=[5
             'failed_to_score': 1 if home_goals == 0 else 0
         })
         
-        team_history[away_id].append({
+        # Record away team's match in their AWAY history (they played away)
+        team_history_away[away_id].append({
             'goals_scored': away_goals,
             'goals_conceded': home_goals,
             'result': away_result,
