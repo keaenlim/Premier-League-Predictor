@@ -4,7 +4,7 @@ A machine learning system that predicts English Premier League match outcomes (W
 
 ## Features
 
-- **52%+ prediction accuracy** using Random Forest classifier
+- **53%+ prediction accuracy** using Random Forest classifier
 - **60+ engineered features** including rolling statistics, form indicators, and betting odds
 - **Automated data pipeline** for weekly updates from football-data.co.uk
 - **Live betting odds integration** via The Odds API
@@ -93,7 +93,7 @@ result = predict_match(home_team, away_team)
   - Matchup comparison metrics (goal diff gap, points gap)
   - Live betting odds (if available)
 - **Validation**: Time-based train/test split (80/20)
-- **Accuracy**: 52%+ on test set
+- **Accuracy**: 53%+ on test set
 
 ## Feature Engineering
 
